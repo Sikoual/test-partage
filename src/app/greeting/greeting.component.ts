@@ -1,26 +1,16 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core'
-import { Observable } from 'rxjs'
+import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-greeting',
   standalone: true,
   imports: [],
   template: `
-    <p>
-     hello from greeting component
-    </p>
-    @if (name){
-        <h2>Hello my name is {{ name.firstName }}</h2>
+    @if (user){
+        <h2>Hello my name is {{ user.firstName }}</h2>
     }
   `,
   styles: ``
 })
 export class GreetingComponent{
-  @Input() name: any
+  @Input() user: any
 }
