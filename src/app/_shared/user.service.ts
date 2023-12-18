@@ -20,13 +20,17 @@ export class UserService
 
   public changeUserName ()
   {
-    // this.http.delete('https://restapi.fr/api/maximehdevweb').subscribe()
-    // this.setUser.subscribe()
-
     const changeUser = { firstName: 'Marine', lastname: 'Dupont' }
 
     this.http.put('https://restapi.fr/api/maximehdevweb', changeUser).subscribe(
       updatedUser => {
+      this.user$.next(updatedUser)
+    })
+  }
+
+  public init(){
+    this.http.delete('https://restapi.fr/api/maximehdevweb').subscribe()
+    this.setUser.subscribe( updatedUser => {
       this.user$.next(updatedUser)
     })
   }

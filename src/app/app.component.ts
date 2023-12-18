@@ -10,6 +10,7 @@ import { GreetingComponent } from './greeting/greeting.component'
   imports: [CommonModule, RouterOutlet, GreetingComponent],
   template: `
   <app-greeting [user]="user$ | async"/>
+  <button (click)="init()">Init/Reset</button>
   <button (click)="changeUserName()">Change name</button>
   `,
   styles: ``
@@ -19,6 +20,10 @@ export class AppComponent {
   public user$ = this.userService.getUser();
 
   public changeUserName(){
-    this.userService.changeUserName()
+    this.userService.changeUserName();
+  }
+
+  public init(){
+    this.userService.init();
   }
 }
