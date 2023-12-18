@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { BehaviorSubject } from 'rxjs'
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs'
 export class UserService
 {
   private http = inject(HttpClient)
-  private user$ = new BehaviorSubject<any>({});
+  private user = {};
 
   public setUser = this.http.post(
     'https://restapi.fr/api/maximehdevweb',
@@ -18,29 +18,22 @@ export class UserService
     }
 )
 
-  public changeUserName ()
+  public async changeUserName ()
   {
     const changeUser = { firstName: 'Marine', lastname: 'Dupont' }
 
-    this.http.put('https://restapi.fr/api/maximehdevweb', changeUser).subscribe(
-      updatedUser => {
-      this.user$.next(updatedUser)
-    })
+    this.user = await firstValueFrom(this.http.put('https://restapi.fr/api/maximehdevweb', changeUser));
+    return this.user
   }
 
-  public init(){
-    this.http.delete('https://restapi.fr/api/maximehdevweb').subscribe()
-    this.setUser.subscribe( updatedUser => {
-      this.user$.next(updatedUser)
-    })
+  public async init(){
+    await firstValueFrom(this.http.delete('https://restapi.fr/api/maximehdevweb'));
+    this.user = await firstValueFrom(this.setUser);
+    return this.user
   }
 
-  public getUser() {
-    this.http.get('https://restapi.fr/api/maximehdevweb')
-    .subscribe(userData => {
-      this.user$.next(userData);
-    });
-
-    return this.user$
+  public async getUser() {
+    this.user = await firstValueFrom(this.http.get('https://restapi.fr/api/maximehdevweb'))
+    return this.user
   }
 }
